@@ -1,0 +1,17 @@
+{"indices":{
+    "SPX":{
+    "Derivatives":{
+        "SPX":{"Leverage": 1},
+        "SDS":{"Leverage": 2},
+        "SPXS":{"Leverage": 3}      
+    }},
+    "SQQQ":{
+    "Derivatives":{
+        "QQQ":{"Leverage": 1},
+        "SQS":{"Leverage": 2},
+        "SQQQ":{"Leverage": 3}      
+        }}
+    }
+}
+
+
