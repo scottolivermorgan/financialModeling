@@ -1,13 +1,46 @@
 {"indices":{
     "SPX":{
     "Derivatives":{
-        "SPX":{"Leverage": 1},
+        "SH":{"Leverage": 1},
         "SDS":{"Leverage": 2},
         "SPXS":{"Leverage": 3}      
     }},
-    "SQQQ":{
+    "DOW":{
+        "Derivatives":{
+            "DOG":{"Leverage": 1},
+            "RYCWX":{"Leverage": 2},
+            "SDOW":{"Leverage": 3}      
+        }},
+    "IXMTR":{
+        "Derivatives":{
+            "FAZ":{"Leverage": 3}      
+        }},
+    "RTY":{
+        "Derivatives":{
+            "PCQ":{"Leverage": 1},
+            "TWM":{"Leverage": 2},
+            "SRTY":{"Leverage": 3},      
+            "TZA":{"Leverage": 3}
+        }},
+    "GLD":{
+        "Derivatives":{    
+            "DUST":{"Leverage": 2}
+        }},
+    "OIL":{
+        "Derivatives":{    
+            "DRIP":{"Leverage": 2}
+        }},
+    "SPSIBITR":{
+        "Derivatives":{    
+            "LABD":{"Leverage": 3}
+        }},
+    "SPSIBITR":{
+        "Derivatives":{    
+            "JDST":{"Leverage": 2}
+        }},
+    "NDX":{
     "Derivatives":{
-        "QQQ":{"Leverage": 1},
+        "PSQ":{"Leverage": 1},
         "SQS":{"Leverage": 2},
         "SQQQ":{"Leverage": 3}      
         }}
