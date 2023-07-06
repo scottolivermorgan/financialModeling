@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 #from scipy import stats
 #import matplotlib.dates as mdates
-from scipy.stats import norm
+#from scipy.stats import norm
 
 # Data reader
 def getData(ticker):
