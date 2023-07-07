@@ -25,6 +25,9 @@ def getData(ticker):
     data['timestamp'] = data.index
     data['Log Close'] = np.log(data['Close'])
     data['Percentage'] = data['Close']/data['Open']
+
+    data.sort_values(by = 'timestamp', ascending = True, inplace = True)
+    data.reset_index(inplace = True)
     
     # Return dataframe
     return data
@@ -46,32 +49,51 @@ def price_vs_time(df,name):
 
 def largestDrawDown(df):
 # find worst possible drawdown:
-    drawDowns=[]
-    #print(len(df))
-    for i in range(len(df)):
-       if i == (len(df)-1):
-           break
-       else:
-           v1=df['Close'].iloc[i]
-           loss=True ; count = i ; DD=0. ; top=0.
-           while loss:
-               try:
-                   count+=1
-                   v2=df['Close'].iloc[count]
-                   if v2<v1:
-                       drawDowns.append([DD,i+1,count,top+1])
-                       loss=False
-                   else:
-                       var= 100.*(v2/v1)
-                       if var>DD:
-                           DD=var
-                           top=count
-                       else:
-                           pass
-               except:
-                   loss=False
-    orderedDD=sorted(drawDowns,key = lambda x:x[0])
-    return orderedDD
+    df_transform = pd.DataFrame(columns = [
+                                    'Open',
+                                    'High',      
+                                    'Low',       
+                                    'Close',     
+                                    'Adj Close',  
+                                    'Volume',    
+                                    'timestamp', 
+                                    'Log Close',
+                                    'Percentage',
+                                    'Time Delta',
+                                    'Price Delta',
+                                    'Max Price',
+                                    'Max Drawdown'
+                                    ])
+
+
+    for index, row in df.iterrows():
+        # return all values greater than start date with a lower price
+
+        temp_df = df[df['timestamp'] > row['timestamp']]
+        max_drawdown = temp_df['Close'].max()
+        price_delta = row['Close'] - max_drawdown
+
+        comparison_row = df[df['Close'] == max_drawdown]
+    
+        temp_df2 = pd.DataFrame(data = {
+                                        'Open': row['Open'],
+                                        'High': row['High'],      
+                                        'Low': row['Low'],       
+                                        'Close': row['Close'],     
+                                        'Adj Close': row['Adj Close'],  
+                                        'Volume': row['Volume'],    
+                                        'timestamp': row['timestamp'], 
+                                        'Log Close': row['Log Close'],
+                                        'Percentage': row['Percentage'],
+                                        'Time Delta': comparison_row['timestamp'],
+                                        'Price Delta': price_delta,
+                                        'Max Price': max_drawdown,
+                                        'Max Drawdown': (max_drawdown/row['Close'] )
+                                        })
+
+        df_transform = pd.concat([df_transform, temp_df2])
+        #var = df_transform.sort_values(by=['Max Drawdown'], ascending=[False])
+    return df_transform
 
 def Insetplotter(x,y,name,DD,percentSet,xshift,yshift,left,bottom,width,height,loc1,loc2):
     #Plot price against time
