@@ -1,9 +1,182 @@
 {"indices":{
+    "SPX":{
+    "Derivatives":{
+        "SH":{"Leverage": 1, "provider": "Proshares"},
+        "SDS":{"Leverage": 2, "provider": "Proshares"},
+        "SPXS":{"Leverage": 3, "provider": "Proshares"}
+    }},
+    "DOW":{
+        "Derivatives":{
+            "DOG":{"Leverage": 1, "provider": "Proshares"},
+            "DXD":{"Leverage": 2, "provider": "Proshares"},
+            "SDOW":{"Leverage": 3, "provider": "Proshares"}      
+        }},
+    "MID":{
+        "Derivatives":{    
+            "SMMD":{"Leverage": 3, "provider": "Proshares"},
+			"MZZ":{"Leverage": 2, "provider": "Proshares"},
+			"MYY":{"Leverage": 1, "provider": "Proshares"}
+        }},
+    "IXMTR":{
+        "Derivatives":{
+            "FAZ":{"Leverage": 3}      
+        }},
+    "RTY":{
+        "Derivatives":{
+			"RWM":{"Leverage": 1, "provider": "Proshares"},
+            "TWM":{"Leverage": 2, "provider": "Proshares"},
+            "SRTY":{"Leverage": 3, "provider": "Proshares"},      
+            "TZA":{"Leverage": 3, "provider": "Direxion"}
+        }},
+    "GLD":{
+        "Derivatives":{    
+            "DUST":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "OIL":{
+        "Derivatives":{    
+            "DRIP":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "SPSIBITR":{
+        "Derivatives":{    
+            "LABD":{"Leverage": 3, "provider": "Proshares"}
+        }},
+    "MVGDXJTR":{
+        "Derivatives":{    
+            "JDST":{"Leverage": 2, "provider": "Proshares"}
+        }},
     "NDX":{
     "Derivatives":{
-        "PSQ":{"Leverage": 1},
-        "SQS":{"Leverage": 2},
-        "SQQQ":{"Leverage": 3}      
+        "PSQ":{"Leverage": 1, "provider": "Proshares"},
+		"QID":{"Leverage": 2, "provider": "Proshares"},
+        "SQQQ":{"Leverage": 3, "provider": "Proshares"}      
+        }},
+    "IXM":{
+    "Derivatives":{
+        "SKF":{"Leverage": 2, "provider": "Proshares"},
+		"SEF":{"Leverage": 1, "provider": "Proshares"}   
+        }},
+    "IDCOT20T":{
+    "Derivatives":{
+        "TTT":{"Leverage": 3, "provider": "Proshares"},
+		"TBT":{"Leverage": 2, "provider": "Proshares"},
+		"TBF":{"Leverage": 1, "provider": "Proshares"}		
+        }},
+    "MXEF":{
+    "Derivatives":{
+        "EEV":{"Leverage": 2, "provider": "Proshares"},
+		"EUM":{"Leverage": 1, "provider": "Proshares"}	
+        }},
+    "IDCOT7TR":{
+    "Derivatives":{
+        "PST":{"Leverage": 2, "provider": "Proshares"},
+		"TBX":{"Leverage": 1, "provider": "Proshares"}	
+        }},
+    "SML":{
+    "Derivatives":{
+        "SDD":{"Leverage": 2, "provider": "Proshares"},
+		"SBB":{"Leverage": 1, "provider": "Proshares"}	
+        }},
+    "NBI":{
+    "Derivatives":{
+        "BIS":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "MXBR2550":{
+    "Derivatives":{
+        "BZQ":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "IXE":{
+    "Derivatives":{
+        "DUG":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "MXEA":{
+    "Derivatives":{
+        "EFU":{"Leverage": 2, "provider": "Proshares"},
+        "EFZ":{"Leverage": 1, "provider": "Proshares"}	
+        }},
+    "ACDER":{
+    "Derivatives":{
+        "EPV":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "EURO":{
+    "Derivatives":{
+        "EUO":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "MXJP":{
+    "Derivatives":{
+        "EWV":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "XINOI":{
+    "Derivatives":{
+        "FXP":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "BCOMGC":{
+    "Derivatives":{
+        "GLL":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "BCOMNG":{
+    "Derivatives":{
+        "KOLD":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "IXT":{
+    "Derivatives":{
+        "REW":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "IXV":{
+    "Derivatives":{
+        "RXD":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "IXY":{
+    "Derivatives":{
+        "SCC":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "BCBCLI":{
+    "Derivatives":{
+        "SCO":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "IXU":{
+    "Derivatives":{
+        "SDP":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "IXI":{
+    "Derivatives":{
+        "SIJ":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "IXB":{
+    "Derivatives":{
+        "SMN":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "IXRE":{
+    "Derivatives":{
+        "SRS":{"Leverage": 2, "provider": "Proshares"},
+        "REK":{"Leverage": 2, "provider": "Proshares"}	
+        }},
+    "DJUSSC":{
+    "Derivatives":{
+        "SSG":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "IXR":{
+    "Derivatives":{
+        "SZK":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "YEN":{
+    "Derivatives":{
+        "YCS":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "BCOMSI":{
+    "Derivatives":{
+        "ZSL":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "SPBTCFUE":{
+    "Derivatives":{
+        "BITI":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "SOEMTYTR":{
+    "Derivatives":{
+        "EMTY":{"Leverage": 2, "provider": "Proshares"}
+        }},
+    "IBOXHY":{
+    "Derivatives":{
+        "SJB":{"Leverage": 2, "provider": "Proshares"}
         }}
     }
 }

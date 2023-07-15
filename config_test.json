@@ -1,0 +1,11 @@
+{"indices":{
+    "NDX":{
+    "Derivatives":{
+        "PSQ":{"Leverage": 1},
+        "SQS":{"Leverage": 2},
+        "SQQQ":{"Leverage": 3}      
+        }}
+    }
+}
+
+
