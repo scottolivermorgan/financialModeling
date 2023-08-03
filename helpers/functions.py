@@ -260,4 +260,5 @@ def linear_model_plot(asset_modeling):
         plt.plot(x, y, label = row['ticker'])
 
     plt.legend()
+    plt.savefig(f'{OUTPUT_PATH}linear_model_comparison.png',bbox_inches="tight")
     plt.show()
