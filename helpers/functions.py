@@ -100,7 +100,7 @@ def price_vs_time(df, name, log):
         plt.xlim(start_date, end_date)
         path = output_dir(name)
         plt.savefig(f'{path}{name}.png') 
-    #plt.show()
+    plt.show()
 
 
 def largestDrawDown(df):
@@ -199,11 +199,31 @@ def distribution_plot(df, name):
 
     path = output_dir(name)
     plt.savefig(f'{path}'+name+'Distribution'+'.png',bbox_inches="tight")
-    #plt.show()
+    plt.show()
 
 def composite_dataframe(df_1, df_2, df_2_ticker):
     col_name = f"{df_2_ticker}_Log_Close"
     df_2 = df_2.rename(columns={"Log Close": col_name})
     df = pd.merge(df_1, df_2, on='Date', how='left')
-    print('df joined')
     return df
+
+def comparison_plot(comparison_df):
+
+    # Will normalise start dates
+    comparison_df = comparison_df.dropna()
+    # Drop datestamp in order to use max function over all coloumns
+    norm = comparison_df.drop('Date', axis=1).max()
+    normalisation_offset = norm.max()
+    
+    plt.figure(1, [10,8])
+    for asset in comparison_df.columns:
+        if asset != 'Date':
+            x = comparison_df['Date']
+            offset = normalisation_offset - comparison_df[asset].iloc[0]
+            y = comparison_df[asset] + offset
+            plt.plot(x, y, label = asset)
+    plt.xlabel('Date')
+    plt.ylabel('Log($)')
+    plt.legend()
+    plt.savefig(f'{OUTPUT_PATH}asset_comparison.png',bbox_inches="tight")
+    plt.show()
