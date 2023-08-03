@@ -11,18 +11,19 @@ import os
 #   verify slope gradient - looks incorrect when using dates
 
 OUTPUT_PATH = 'output//'
+DATA_PATH = 'data//'
 
-def output_dir(name):
+def output_dir(name, PATH):
     """Create sub-dir to store plots if it dosen't exist
     Args:
         name -- Sub directory name.
     Returns:
         none    
     """
-    if not os.path.isdir(f'{OUTPUT_PATH}{name}'):
+    if not os.path.isdir(f'{PATH}{name}'):
         # directory dose not exist, create it
-        os.mkdir(f'{OUTPUT_PATH}{name}')
-    return f'{OUTPUT_PATH}{name}//'
+        os.mkdir(f'{PATH}{name}')
+    return f'{PATH}{name}//'
 
 def getData(ticker):
     """Retrive financial data for asset from yahoo finance API
@@ -33,13 +34,27 @@ def getData(ticker):
     """
     # todays date
     current_dateTime = dt.datetime.now()
-    
+
+    path = output_dir(ticker, DATA_PATH)
+
     # Retrive info
     asset = yf.Ticker(ticker)
 
     # Need to call first to be able to acess start date
     hist = asset.history(period="max")
-    start_date = hist.index.min()
+
+    if not os.path.isfile(f'{path}{ticker}'):
+        start_date = hist.index.min()
+        mode = 'w'
+    else:
+        stale_df = pd.read_csv('data.csv')
+        stale_df.sort_values(by = 'timestamp', ascending = True, inplace = True)
+        stale_df.reset_index(inplace = True)
+        start_date = stale_df.iloc[0]['Date']
+        mode = 'a'
+
+
+    #start_date = hist.index.min()
     data = yf.download(ticker, start = start_date, end = current_dateTime).dropna()
 
     # Calculate log of close price and percentage change for later use
@@ -47,9 +62,15 @@ def getData(ticker):
     data['Log Close'] = np.log(data['Close'])
     data['Percentage'] = data['Close']/data['Open']
 
+    if mode == 'a':
+        data = pd.concat([data, stale_df])
+
     # Sort chronologically and reset index
     data.sort_values(by = 'timestamp', ascending = True, inplace = True)
     data.reset_index(inplace = True)
+
+    data.to_csv(f'{path}{ticker}.csv', mode=mode, index=False, header=True)
+
     return data
 
 def price_vs_time(df, name, log):
@@ -85,8 +106,10 @@ def price_vs_time(df, name, log):
         plt.xlabel('Date', fontsize = 20)
         plt.xlim(start_date, end_date)
         plt.legend()
-        path = output_dir(name)
+        path = output_dir(name, OUTPUT_PATH)
         plt.savefig(f'{path}Log({name}).png')
+        #plt.show()
+        return slope, intercept, r_value, p_value, std_err
 
     else:
         x = df['timestamp']
@@ -98,9 +121,9 @@ def price_vs_time(df, name, log):
         plt.title(f'{name} $ vs Time')
         plt.xlabel('Date', fontsize = 20)
         plt.xlim(start_date, end_date)
-        path = output_dir(name)
+        path = output_dir(name, OUTPUT_PATH)
         plt.savefig(f'{path}{name}.png') 
-    plt.show()
+        #plt.show()
 
 
 def largestDrawDown(df):
@@ -197,9 +220,9 @@ def distribution_plot(df, name):
     s='STD ='+str(round(std,4))+'%'
     plt.tight_layout()
 
-    path = output_dir(name)
+    path = output_dir(name, OUTPUT_PATH)
     plt.savefig(f'{path}'+name+'Distribution'+'.png',bbox_inches="tight")
-    plt.show()
+    #plt.show()
 
 def composite_dataframe(df_1, df_2, df_2_ticker):
     col_name = f"{df_2_ticker}_Log_Close"
@@ -226,4 +249,15 @@ def comparison_plot(comparison_df):
     plt.ylabel('Log($)')
     plt.legend()
     plt.savefig(f'{OUTPUT_PATH}asset_comparison.png',bbox_inches="tight")
+    plt.show()
+
+
+def linear_model_plot(asset_modeling):
+    plt.figure(1, [10,5])
+    x = np.linspace(0, 3650, 3650)
+    for index, row in asset_modeling.iterrows():
+        y = row['slope']*x
+        plt.plot(x, y, label = row['ticker'])
+
+    plt.legend()
     plt.show()

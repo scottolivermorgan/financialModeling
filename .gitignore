@@ -1,6 +1,8 @@
 venv/
 output/*
+data/*
 
-!output/__init__.py.gitkeep 
+!output/__init__.py.gitkeep
+!data/__init__.py.gitkeep
 
 config_test.js
