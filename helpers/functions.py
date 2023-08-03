@@ -200,3 +200,10 @@ def distribution_plot(df, name):
     path = output_dir(name)
     plt.savefig(f'{path}'+name+'Distribution'+'.png',bbox_inches="tight")
     #plt.show()
+
+def composite_dataframe(df_1, df_2, df_2_ticker):
+    col_name = f"{df_2_ticker}_Log_Close"
+    df_2 = df_2.rename(columns={"Log Close": col_name})
+    df = pd.merge(df_1, df_2, on='Date', how='left')
+    print('df joined')
+    return df
