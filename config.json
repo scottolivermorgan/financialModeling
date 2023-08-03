@@ -3,7 +3,7 @@
     "Derivatives":{
         "SH":{"Leverage": 1, "provider": "Proshares"},
         "SDS":{"Leverage": 2, "provider": "Proshares"},
-        "SPXS":{"Leverage": 3, "provider": "Proshares"}
+        "SPXS":{"Leverage": 3, "provider": "Direxion"}
     }},
     "DOW":{
         "Derivatives":{
