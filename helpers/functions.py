@@ -253,12 +253,15 @@ def comparison_plot(comparison_df):
 
 
 def linear_model_plot(asset_modeling):
-    plt.figure(1, [10,5])
+    fig = plt.figure(figsize = [10,10])
+    ax = plt.subplot(111)
     x = np.linspace(0, 3650, 3650)
     for index, row in asset_modeling.iterrows():
         y = row['slope']*x
-        plt.plot(x, y, label = row['ticker'])
-
-    plt.legend()
-    plt.savefig(f'{OUTPUT_PATH}linear_model_comparison.png',bbox_inches="tight")
-    plt.show()
+        ax.plot(x, y, label = row['ticker'])
+    ax.set_xlim(0, 3650)
+    ax.set_xlabel('Day Count')
+    ax.set_ylabel('Log($)')
+    ax.legend(ncol=4, loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.savefig(f'{OUTPUT_PATH}model_asset_comparison.png',bbox_inches="tight")
+    return fig
