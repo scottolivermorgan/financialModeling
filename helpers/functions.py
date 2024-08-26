@@ -44,6 +44,35 @@ def price_vs_time(df,name):
     plt.show()
 
 
+#def largestDrawDown(df):
+## find worst possible drawdown:
+#    drawDowns=[]
+#    #print(len(df))
+#    for i in range(len(df)):
+#       if i == (len(df)-1):
+#           break
+#       else:
+#           v1=df['Close'].iloc[i]
+#           loss=True ; count = i ; DD=0. ; top=0.
+#           while loss:
+#               try:
+#                   count+=1
+#                   v2=df['Close'].iloc[count]
+#                   if v2<v1:
+#                       drawDowns.append([DD,i+1,count,top+1])
+#                       loss=False
+#                   else:
+#                       var= 100.*(v2/v1)
+#                       if var>DD:
+#                           DD=var
+#                           top=count
+#                       else:
+#                           pass
+#               except:
+#                   loss=False
+#    orderedDD=sorted(drawDowns,key = lambda x:x[0])
+#    return orderedDD
+
 def largestDrawDown(df):
 # find worst possible drawdown:
     drawDowns=[]
@@ -59,7 +88,7 @@ def largestDrawDown(df):
                    count+=1
                    v2=df['Close'].iloc[count]
                    if v2<v1:
-                       drawDowns.append([DD,i+1,count,top+1])
+                       drawDowns.append([DD, df.index[i+1], df.index[count], df.index[top+1]])
                        loss=False
                    else:
                        var= 100.*(v2/v1)
