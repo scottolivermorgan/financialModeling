@@ -8,7 +8,7 @@
     "DOW":{
         "Derivatives":{
             "DOG":{"Leverage": 1},
-            "RYCWX":{"Leverage": 2},
+            "DXD":{"Leverage": 2},
             "SDOW":{"Leverage": 3}      
         }},
     "IXMTR":{
@@ -41,7 +41,7 @@
     "NDX":{
     "Derivatives":{
         "PSQ":{"Leverage": 1},
-        "SQS":{"Leverage": 2},
+        "QID":{"Leverage": 2},
         "SQQQ":{"Leverage": 3}      
         }}
     }

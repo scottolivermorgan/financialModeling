@@ -3,13 +3,15 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-#from scipy import stats
-#import matplotlib.dates as mdates
-from scipy.stats import norm
+from scipy import stats
+import matplotlib.dates as mdates
+#from scipy.stats import norm
 import numpy as np
 from datetime import datetime, timedelta
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import os
+import seaborn as sns
+from scipy.stats import gaussian_kde
 
 # Set global vars
 OUTPUT_PATH = 'output'
@@ -124,6 +126,80 @@ def price_vs_time_plot(df,name):
     return fig, ax
 
 
+def log_plot(df, ticker):
+    """
+    Plots the logarithm of stock prices over time with a linear regression fit and returns the plot and fit coefficients.
+
+    Args:
+        df (pandas.DataFrame): DataFrame containing the stock price data with a datetime index and a 'Log Close' column.
+        ticker (str): The ticker symbol of the stock, used as the title of the plot.
+
+    Returns:
+        matplotlib.pyplot: The matplotlib plot object for further customization or saving.
+        dict: A dictionary containing the linear regression fit coefficients, including:
+            - 'slope' (float): The slope of the linear regression line.
+            - 'intercept' (float): The intercept of the linear regression line.
+            - 'r_value' (float): The correlation coefficient.
+            - 'p_value' (float): The p-value for the hypothesis test.
+            - 'std_err' (float): The standard error of the estimate.
+
+    Example:
+        >>> df = pd.DataFrame({'Log Close': np.log(prices)}, index=dates)
+        >>> log_plot(df, 'AAPL')
+    """
+    fig, ax = plt.subplots(figsize=(20, 10))
+    
+    # Use the DataFrame index for the x-axis
+    x = pd.to_datetime(df.index)
+    y = df['Log Close']
+    
+    # Convert dates to numbers for linear regression
+    x_num = np.arange(len(x))
+    
+    # Perform linear regression
+    slope, intercept, r_value, p_value, std_err = stats.linregress(x_num, y)
+
+        # Return the figure and the fit coefficients
+    fit_coefficients = {
+        'slope': slope,
+        'intercept': intercept,
+        'r_value': r_value,
+        'p_value': p_value,
+        'std_err': std_err
+    }
+    
+    # Prepare the fit line
+    x_fit_num = np.linspace(0, len(x) - 1, num=len(x))
+    y_fit = slope * x_fit_num + intercept
+    
+    # Plot the data and the fit line
+    ax.plot(x, y, 'k.-', label='Log(y) vs Date')
+    ax.plot(x, y_fit, 'b.-', label=f'f(y)= {round(slope, 4)}x + {round(intercept, 4)}')
+    
+    # Format the x-axis to show dates
+    ax.xaxis.set_major_locator(mdates.YearLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+    
+    # Rotate and format the date labels
+    plt.setp(ax.get_xticklabels(), rotation=45, ha='right', fontsize=16)
+    
+    # Customize the plot
+    plt.legend(prop={'size': 24})
+    ax.tick_params(axis='both', which='major', labelsize=20)
+    plt.xlabel('Date', fontsize=30)
+    plt.ylabel('Log(Price)', fontsize=30)
+    plt.tight_layout()
+    plt.title(ticker, fontsize=20)
+
+    # Save plot to folder
+    fig_path = os.path.join(OUTPUT_PATH, ticker)
+    create_output_folder(fig_path)
+    plt.savefig(os.path.join(fig_path, f'{ticker}_log.png'),
+                bbox_inches="tight")
+
+    return plt, fit_coefficients
+
+
 def largest_drawdown(df):
     """
     Calculate the largest drawdown for a given DataFrame of stock prices.
@@ -190,7 +266,7 @@ def largest_drawdown(df):
     return sorted(draw_downs, key=lambda x:x[0])
 
 
-def drawdown_inset_plotter(df, y, name, drawdown):
+def drawdown_inset_plotter(df, name, drawdown):
     """
     Plots the price against time and highlights the largest drawdown on the plot. 
     Additionally, creates an inset plot zooming in on the region of the maximum drawdown.
@@ -230,7 +306,7 @@ def drawdown_inset_plotter(df, y, name, drawdown):
 
     # Highlight max drawdown location with big red circle
     ax.plot(drawdown_start_date,
-             y[drawdown_end_date],
+             df['Close'][drawdown_end_date],
              'ro',
              markersize=40,
              fillstyle='none')
@@ -287,76 +363,71 @@ def drawdown_inset_plotter(df, y, name, drawdown):
     return plt
 
 
-#def Insetplotter(x,y,name,DD,percentSet,xshift,yshift,left,bottom,width,height,loc1,loc2):
-#    #Plot price against time
-#    plt.figure(1,[10,5])
-#    DDstart = DD[-1][1] ; DDend = DD[-1][2]
-#    plt.plot(x,y,'k.-')
-#    #plt.scatter(DDstart,y[DDstart],s=20, facecolors='none', edgecolors='r')
-#    plt.plot(DDstart,y[DDstart],'ro',markersize=40,fillstyle='none')
-#    #plt.arrow(1500,15000,750,-11500,color='r')
-#    plt.axis([0, len(x), 1.1*np.amin(y), np.amax(y)])
-#    plt.tick_params(axis='both', which='major', labelsize=30)
-#    plt.xlabel('Days since inception',fontsize=30)
-#    plt.ylabel('$',fontsize=40)
-#    plt.xlim(0.,len(x))
-#    
-#    plt.title(name,fontsize=20)
-#     
-#    #Plot inset of logged version with fit line
-#    DDstart = DD[-1][1] ; DDend = DD[-1][-1]
-#    xx=x[DDstart-20:DDend+20] ; yy=y[DDstart-20:DDend+20]
-#    plt.figure(2,[10,5])
-#    #a= plt.axes([0.2+left,0.25+bottom,0.7+width,0.55+height])    # [left,bottom,width,height]
-#    plt.plot(xx,yy,'k.-')
-#    
-#    plt.plot([DDstart,DDstart],[np.amin(yy)*0.95,np.amax(yy)*1.05],'r:')
-#    plt.plot([DDend,DDend],[np.amin(yy)*0.95,np.amax(yy)*1.05],'r:')
-#    plt.ylim(np.amin(yy)*0.95,np.amax(yy)*1.05)
-#    plt.xlim(xx[0],xx[-1])
-#    l1='Max Drawdown = '+str(round(DD[-1][0],2))+'%'
-#    plt.text(DDstart+xshift,np.amin(yy)+yshift,l1,fontsize=10)
-#    #plt.savefig('plots//'+'DD '+name+'.png',bbox_inches="tight")
-#    #plt.tight_layout()
-#    plt.show()
-#    
-#    def distributionPlot(percentSet,name,loc1,loc2):
-#        # Histogram of daily percentage movments
-#        percentSet=(percentSet-1.)*100.
-#        #Plot params
-#        fig= plt.figure(1,[10,10])
-#        ax = fig.add_subplot(1, 1, 1)
-#        ax.tick_params(axis='both', which='major', labelsize=20)
-#        var= ax.hist(percentSet,bins=200)
-#        plotHeight=sorted(var[0])
-#        plotWidth=sorted(var[1])
-#        plt.xlabel('Daily movment (%)',fontsize=20)
-#        plt.ylabel('Frequency',fontsize=20)
-#        plt.ylim(plotHeight[0],plotHeight[-1])
-#        plt.title(name,fontsize=40)
-#        # Stats
-#        mean,std=norm.fit(percentSet)
-#        std1=[std,std] ;std2=[2*std,2*std];std3=[3*std,3*std]
-#        Nstd1=[(-std+mean),(-std+mean)] ;Nstd2=[2*(-std+mean),2*(-std+mean)];Nstd3=[3*(-std+mean),3*(-std+mean)]
-#        aveX=[mean,mean]; aveY=[0,plotHeight[-1]+5]
-#        #plot and save
-#        plt.plot(aveX,aveY,'k--',linewidth=2)
-#        plt.plot(std1,aveY,'r:',linewidth=2)
-#        plt.plot(std2,aveY,'r:',linewidth=2)
-#        plt.plot(std3,aveY,'r:',linewidth=2)
-#        plt.plot(Nstd1,aveY,'r:',linewidth=2)
-#        plt.plot(Nstd2,aveY,'r:',linewidth=2)
-#        plt.plot(Nstd3,aveY,'r:',linewidth=2)
-#        m='Mean ='+str(round(mean,4))+'%'
-#        s='STD ='+str(round(std,4))+'%'
-#        plt.text(loc1[0],loc1[1],m,fontsize=20)
-#        plt.tight_layout()
-#        plt.text(loc2[0],loc2[1],s,fontsize=20)
-#        #plt.savefig('plots//'+name+'Distribution'+'.png',bbox_inches="tight")
-#        plt.show()
-#        
-#    distributionPlot(percentSet,name,loc1,loc2)
+def plot_histogram_with_pdf(df, ticker):
+    """
+    Plots a histogram with a Probability Density Function (PDF) from a pandas Series,
+    and returns the plot, mean, standard deviation, and KDE coefficients.
 
-    
+    Parameters:
+    series (pandas.Series): The input series for which to plot the histogram and PDF.
 
+    Returns:
+    - fig: The matplotlib figure object.
+    - mean: The mean of the series.
+    - std_dev: The standard deviation of the series.
+    - kde_coeffs: The coefficients of the KDE (evaluated at the series values).
+    """
+    # Relevent df column expressed as a percentage
+    series = (df['Percentage'] - 1.)*100.
+
+    # Calculate mean and standard deviation
+    mean = series.mean()
+    std_dev = series.std()
+
+    # Create the KDE using scipy
+    kde = gaussian_kde(series)
+    kde_coeffs = kde(series)
     
+    # Create the plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    
+    # Plot the histogram with KDE
+    sns.histplot(series,
+                 bins=100,
+                 kde=True,
+                 stat="density",
+                 color="silver",
+                 edgecolor='black',
+                 alpha=0.7,
+                 ax=ax)
+    
+    # Annotate mean and standard deviation
+    ax.axvline(mean,
+               color='red',
+               linestyle='--',
+               label=f'Mean: {mean:.2f}')
+    
+    ax.axvline(mean + std_dev,
+               color='blue',
+               linestyle='--',
+               label=f'Standard Deviation (+1σ): {mean + std_dev:.2f}')
+    
+    ax.axvline(mean - std_dev,
+               color='blue',
+               linestyle='--',
+               label=f'Standard Deviation (-1σ): {mean - std_dev:.2f}')
+    
+    # Add titles, labels, and legend
+    ax.set_title(f'Histogram and PDF of daily percentage movement of {ticker}')
+    ax.set_xlabel('Daily %')
+    ax.set_ylabel('Density')
+    ax.legend(loc='upper right')
+    ax.grid(True)
+
+    # Save plot to folder
+    fig_path = os.path.join(OUTPUT_PATH, ticker)
+    create_output_folder(fig_path)
+    plt.savefig(os.path.join(fig_path, f'{ticker}_daily_distribution.png'),
+                bbox_inches="tight")
+    
+    return fig, mean, std_dev, kde_coeffs
