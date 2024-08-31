@@ -187,6 +187,7 @@ def log_plot(df, ticker):
     plt.legend(prop={'size': 24})
     ax.tick_params(axis='both', which='major', labelsize=20)
     plt.xlabel('Date', fontsize=30)
+    plt.xlim(x.min(), x.max())
     plt.ylabel('Log(Price)', fontsize=30)
     plt.tight_layout()
     plt.title(ticker, fontsize=20)
